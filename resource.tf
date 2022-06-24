@@ -1,6 +1,6 @@
-//resource "openstack_networking_floatingip_v2" "myip" {
-  //pool = "${var.public_network_name}"
-//}
+resource "openstack_networking_floatingip_v2" "myip" {
+  pool = "${var.public_network_name}"
+}
 
 //data "template_file" "user_data" {
   //template = file("${path.module}/templates/conf_data.yaml")
@@ -23,7 +23,7 @@ resource "openstack_compute_instance_v2" "agw_deployment"{
   name            = "${var.prefix}"
   image_id       = "${var.image_id}"
   flavor_id       = "${var.flavor_id}"
-  //key_pair        = openstack_compute_keypair_v2.demo_keypair.name
+  key_pair        = openstack_compute_keypair_v2.demo_keypair.name
   //user_data       = data.template_file.user_data.rendered
 network {
     port = "${openstack_networking_port_v2.ports.*.id[0]}"
@@ -35,8 +35,8 @@ resource "openstack_compute_interface_attach_v2" "attachments" {
   port_id     = "${openstack_networking_port_v2.ports.*.id[1]}"
 }
 
-//resource "openstack_networking_floatingip_associate_v2" "myip" {
-  //floating_ip = "${openstack_networking_floatingip_v2.myip.address}"
-  //port_id = "${openstack_networking_port_v2.ports.*.id[0]}"
-//}
+resource "openstack_networking_floatingip_associate_v2" "myip" {
+  floating_ip = "${openstack_networking_floatingip_v2.myip.address}"
+  port_id = "${openstack_networking_port_v2.ports.*.id[0]}"
+}
 
